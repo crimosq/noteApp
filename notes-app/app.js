@@ -1,86 +1,85 @@
+const chalk = require('chalk'); // import chalk for colored console output (unused in this script)
+const notes = require('./notes.js'); // import custom notes module for note operations
+const yargs = require('yargs'); // import yargs for command line interface building
 
- const chalk = require('chalk')
+// Customize yargs version
+yargs.version('1.1.0');
 
-const notes = require('./notes.js')
-
-const yargs = require('yargs')
-
-
-//customize yargs version 
-yargs.version('1.1.0')
-
-
-//creating add command
+// Create 'add' command with yargs
 yargs.command({
     command: 'add',
     describe: 'Add a new note',
-    builder:{
-        title:{
-            describe: 'Note title',
-            demandOption:true,
-            type:'string'
-        },
-        body: {
-            describe: 'note body',
-            demandOption:true,
-            type: 'string'
-        }
-    },
-    handler: function(argv){
-        notes.addnote(argv.title,argv.body)
-    }
-})
-//Create remove command
-
-yargs.command({
-    command: 'remove',
-    describe: 'removing Note',
     builder: {
         title: {
-            describe: 'note title',
-            demandOption: true,
+            describe: 'Note title',
+            demandOption: true, // Title is a required argument
+            type: 'string'
+        },
+        body: {
+            describe: 'Note body',
+            demandOption: true, // Body is a required argument
             type: 'string'
         }
     },
-    handler: function(argv){
-        notes.removeNote(argv.title)
+    handler(argv) {
+        notes.addnote(argv.title, argv.body); // Call addnote method from notes module
     }
-})
+});
+
+// Create 'remove' command with yargs
+yargs.command({
+    command: 'remove',
+    describe: 'Remove a note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true, // Title is a required argument
+            type: 'string'
+        }
+    },
+    handlerv(argv) {
+        notes.removeNote(argv.title); // Call removeNote method from notes module
+    }
+});
 
 
+
+
+
+// Create 'list' command with yargs
 yargs.command({
     command: 'list',
-    describe: 'Listing the notes',
-    handler: function(){
-        console.log('listing Notes')
+    describe: 'List all notes',
+    handler() {
+       notes.listNotes
     }
-})
+});
 
+// Create 'read' command with yargs
 yargs.command({
     command: 'read',
-    describe: 'reading note',
-    handler: function(){
-        console.log('reading the Note!')
+    describe: 'Read a note',
+    builder:{
+        title:{
+            describe: 'Note Title',
+            demandOption: true,
+            type:'string'
+        }
+    },  
+    handler(argv) {
+        notes.readNote(argv.title)
     }
-})
+});
 
-// add,remove,read,list
-// body option and add command
-
-
-yargs.parse()
-
-// console.log(yargs.argv)
+// Parse the command line arguments
+yargs.parse();
 
 
-
-// const command = process.argv[2]
-// console.log(process.argv)
-// if(command === 'add'){
-//  console.log('adding note')
-// } else if(command === 'remove') {
-//     console.log('removing note')
+// const command = process.argv[2];
+// console.log(process.argv);
+// if (command === 'add') {
+//     console.log('Adding note');
+// } else if (command === 'remove') {
+//     console.log('Removing note');
 // }
-
-
 
